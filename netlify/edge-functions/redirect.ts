@@ -105,8 +105,38 @@ function target(pathname: string): string {
   return HOME;
 }
 
+// ---- Feed de inventário local para o Google Merchant Center ----
+// Estoque é integrado: tudo que está disponível no site está nas 2 lojas físicas.
+const FEED = "https://www.edubolsas.com.br/feed/?operation=googleshopping";
+const STORES = ["13237919501666084020", "12117036976146214454"]; // Parque Shopping, Indiana (códigos do Perfil da Empresa)
+
+async function localInventory(): Promise<Response> {
+  const r = await fetch(FEED, {
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
+      "Accept": "application/xml,text/xml,*/*",
+    },
+  });
+  if (!r.ok) return new Response("feed indisponivel: " + r.status, { status: 502 });
+  const xml = await r.text();
+  const lines = ["store_code\tid\tavailability"];
+  const items = xml.split(/<item>/).slice(1);
+  for (const it of items) {
+    const id = (it.match(/<g:id>\s*(?:<!\[CDATA\[)?([^<\]]+)/) || [])[1]?.trim();
+    const av = (it.match(/<g:availability>\s*(?:<!\[CDATA\[)?([^<\]]+)/) || [])[1]?.trim() || "in_stock";
+    if (!id) continue;
+    const availability = /out/i.test(av) ? "out_of_stock" : "in_stock";
+    for (const s of STORES) lines.push(`${s}\t${id}\t${availability}`);
+  }
+  return new Response(lines.join("\n") + "\n", {
+    status: 200,
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" },
+  });
+}
+
 export default async (req: Request, _context: Context) => {
   const url = new URL(req.url);
+  if (url.pathname === "/google-inventario-local.txt") return localInventory();
   const dest = target(url.pathname);
   return new Response(null, {
     status: 301,
