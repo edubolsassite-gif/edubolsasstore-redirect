@@ -106,9 +106,9 @@ function target(pathname: string): string {
 }
 
 // ---- Feed de inventário local para o Google Merchant Center ----
-// Estoque é integrado: tudo que está disponível no site está nas 2 lojas físicas.
+// Estoque é integrado: tudo que está disponível no site está nas 3 lojas físicas.
 const FEED = "https://edubolsas.painel.magazord.com.br/feed/?operation=googleshopping";
-const STORES = ["13237919501666084020", "12117036976146214454"]; // Parque Shopping, Indiana (códigos do Perfil da Empresa)
+const STORES = ["13237919501666084020", "12117036976146214454", "00782709812714463123"]; // Parque Shopping, Indiana, Centro (códigos do Perfil da Empresa)
 
 async function localInventory(): Promise<Response> {
   const r = await fetch(FEED, {
