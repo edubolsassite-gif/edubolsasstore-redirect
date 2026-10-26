@@ -137,6 +137,8 @@ async function localInventory(): Promise<Response> {
 export default async (req: Request, _context: Context) => {
   const url = new URL(req.url);
   if (url.pathname === "/google-inventario-local.txt") return localInventory();
+  // feed suplementar do Merchant Center (arquivo estatico em public/): deixa passar para o site estatico
+  if (url.pathname === "/feed-suplementar-merchant.xml") return;
   const dest = target(url.pathname);
   return new Response(null, {
     status: 301,
