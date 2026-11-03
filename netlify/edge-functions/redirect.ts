@@ -139,6 +139,8 @@ export default async (req: Request, _context: Context) => {
   if (url.pathname === "/google-inventario-local.txt") return localInventory();
   // feed suplementar do Merchant Center (arquivo estatico em public/): deixa passar para o site estatico
   if (url.pathname === "/feed-suplementar-merchant.xml") return;
+  // fotos da fabrica e arquivos estaticos usados nas paginas do site (public/img/): deixa passar
+  if (url.pathname.startsWith("/img/")) return;
   const dest = target(url.pathname);
   return new Response(null, {
     status: 301,
