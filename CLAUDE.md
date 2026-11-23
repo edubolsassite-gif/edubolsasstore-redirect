@@ -12,3 +12,9 @@
 - Este repositório só contém o redirecionamento da loja antiga (edubolsasstore.com.br) para
   www.edubolsas.com.br e o feed de inventário local do Merchant Center (Netlify edge function).
 - A loja em si roda no Magazord, fora do GitHub.
+
+## E-mail da empresa
+- Todo e-mail em nome da Edubolsas sai de um endereço @edubolsas.com.br (hoje livia@edubolsas.com.br,
+  caixa na Hostinger), nunca do Gmail edubolsas.site@gmail.com. O Gmail serve só para conectores
+  e para receber cópias; quando a caixa da Hostinger estiver ligada ao Gmail, rascunhos saem com
+  "Enviar como" livia@edubolsas.com.br.
